@@ -1,0 +1,14 @@
+{
+  "name": "opencode-ppm-service",
+  "version": "1.0.0",
+  "description": "opencode web UI managed as a PPM service — access from any browser at machine:6969",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

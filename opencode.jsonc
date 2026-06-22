@@ -1,0 +1,43 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // PPM MCP server — HTTP transport, works from any machine on Tailscale
+  // All ~40 PPM fleet management tools are available from any device
+  "mcp": {
+    "ppm": {
+      "type": "remote",
+      "url": "http://100.108.38.41:7010/mcp",
+      "enabled": true
+    }
+  },
+
+  // opencode has native multi-provider support — no proxy needed.
+  // Use `opencode models` or the TUI model picker to select providers/models.
+  // Cloud providers: Anthropic, OpenRouter, DeepSeek, Google Vertex, AWS Bedrock
+  // Local models: Ollama (http://localhost:11434) — start via PM2 or systemd
+
+  // Whisper audio transcription service
+  "experimental": {
+    "hook": {
+      "session_completed": [
+        {
+          "command": ["node", "-e", "/* session completed hook placeholder */"]
+        }
+      ]
+    }
+  },
+
+  // References for AI context
+  "references": {
+    "ppm": {
+      "path": "C:/mysoftwarefolder/PersonalProjectManager",
+      "description": "PPM fleet manager — controller, agent, MCP server source"
+    }
+  },
+
+  // Disable tools not relevant in web sessions
+  "tools": {
+    "github-triage": false,
+    "github-pr-search": false
+  }
+}
