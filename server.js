@@ -11,7 +11,7 @@
  * On startup it's synced to the real user's ~/.config/opencode/.
  */
 
-import { spawn } from 'child_process';
+import { spawn, execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import path from 'path';
@@ -73,9 +73,8 @@ const childEnv = {
   PATH: `${path.join(REAL_HOME, 'AppData', 'Roaming', 'npm')};${process.env.PATH || ''}`
 };
 
-const proc = spawn(OPENCODE_CMD, ['web', '--port', String(PORT), '--hostname', HOST], {
+const proc = spawn('cmd', ['/c', OPENCODE_CMD, 'web', '--port', String(PORT), '--hostname', HOST], {
   stdio: 'inherit',
-  shell: true,
   cwd: __dirname,
   env: childEnv
 });
@@ -90,6 +89,6 @@ proc.on('exit', (code, signal) => {
   process.exit(code ?? 1);
 });
 
-// Forward termination signals to the child process
-process.on('SIGINT', () => { proc.kill('SIGINT'); });
-process.on('SIGTERM', () => { proc.kill('SIGTERM'); });
+// Ensure the whole process tree dies with the service.
+process.on('SIGINT', () => { try { execSync(`taskkill /t /pid ${proc.pid} 2>nul`, { stdio: 'ignore' }); } catch {} process.exit(0); });
+process.on('SIGTERM', () => { try { execSync(`taskkill /t /pid ${proc.pid} 2>nul`, { stdio: 'ignore' }); } catch {} process.exit(0); });
